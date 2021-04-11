@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\EntryForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -129,5 +130,19 @@ class SiteController extends Controller
     public function actionSay($message = 'Hello'): string
     {
         return $this->render('say', ['message' => $message]);
+    }
+
+    public function actionEntry()
+    {
+        $model = new EntryForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            // valid data received in the post request
+            return $this->render('entry-confirm', ['model' => $model]);
+        } else {
+            // either the page is initially displayed or the model has errors
+            return $this->render('entry', ['model' => $model]);
+        }
     }
 }
